@@ -17,7 +17,7 @@ const getTemplate = (data = [], placeholder, selectedId) => {
 				</svg>
 			</div>
 		</ div>
-		<div class="select__body">
+		<div data-select-type="body" class="select__body">
 			<ul class="select__list">
 				${items.join('')}
 			</ul>
@@ -30,6 +30,7 @@ export class Select {
 		this.$el = document.querySelector(selector);
 		this.options = options;
 		this.selectedId = this.options.selectedId;
+		this.selectPerView = this.options.selectPerView;
 
 		this.#render();
 		this.#setup();
@@ -44,6 +45,14 @@ export class Select {
 		this.clickHandler = this.clickHandler.bind(this);
 		this.$el.addEventListener("click", this.clickHandler);
 		this.$value = this.$el.querySelector('[data-select-type="value"]');
+
+		this.$item = this.$el.querySelector('[data-select-type="item"]');
+		this.$body = this.$el.querySelector('[data-select-type="body"]');
+
+		if (this.selectPerView === "all") {
+			this.$body.style.maxHeight = `${this.$item.offsetHeight * this.options.data.length}px`;
+
+		}
 	}
 
 	clickHandler(event) {
